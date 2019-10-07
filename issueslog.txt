@@ -1,0 +1,3 @@
+AndroidManifest.xlm: rebuild app file in /Android
+Flow.ext: flowconfig update .107.0
+react-Community : reinstall Android Cli
