@@ -77,15 +77,15 @@ const OnResponse = response => {
         JWTToken : setJWTToken(response.data.JWTToken),
         email : setEmail(response.data.email),
    };
-     let userkeyMap = [['userId',userInfo.userId],['JWTToken',userInfo.JWTToken],['email',userInfo.email]]
+     var userkeyMap = [['userId',userInfo.userId],['JWTToken',userInfo.JWTToken],['email',userInfo.email]]
    const storeUserInfo  = async userInfo =>{
      try{
-        await AsyncStorage.multiSet([userkeyMap. err => {}])
+        await AsyncStorage.multiSet([userkeyMap,err => {}])
+     }catch(error){
+       console.log('error')
+
      }
         
-   }
-  
-
   console.log('Success:' + JSON.stringify(response, undefined, '\t'));
   // if success push to  Monitors
 };
