@@ -22,44 +22,22 @@ import {Signup} from './src/components/Signup';
 import KaatsuMonitor from './src/components/Monitor';
 import {LoginForm} from './src/components/LoginForm';
 import {Home} from './src/components/Home';
-import {
-  Route,
-  Router,
-  Link,
-  BackButton,
-  NativeRouter,
-  Switch,
-} from 'react-router-native';
-import {Routes} from './routes/routes';
+import {Route, BackButton, NativeRouter} from 'react-router-native';
 
 class App extends React.Component {
   render() {
-    // ComponentDidMount to check or WillMount to check AsyncStorage for  token
-    //  getUserId = async () => {
-    //    let userId '' ;
-    //    try{
-    //       userId = await AsyncStorage.getItem('userId') || 'none';
-    //    } catch (error){
-    //      //Error retreive data
-    //      console.log(error.message);
-    //    }
-    // return userId;
-    //  }
-    // if(!getUserId)
-    //{
-    //  history.push("/LoginForm");
-    //} else { prompt(getUserId);    // this is welcome
-    //   history.push('/Monitor');
-    //}
     return (
       <NativeRouter>
         <BackButton>
           <View style={styles.sectionContainer}>
-            <StatusBar barStyle="dark-content" />
-            <BackButton />
+            <StatusBar
+              background="#C55545"
+              barStyle="light-content"
+              networkActivityIndicatorVisible
+            />
             <Route exact path="/" component={Home} />
             <Route path="/LoginForm" component={LoginForm} />
-            <Route path="/sMonitor" component={KaatsuMonitor} />
+            <Route path="/Monitor" component={KaatsuMonitor} />
             <Route path="/Signup" component={Signup} />
           </View>
         </BackButton>

@@ -1,16 +1,19 @@
-import React ,{useState} from 'react';
+import React from 'react';
 import {
   TouchableOpacity,
   Text,
   StyleSheet,
   View,
   TextInput,
+  ActivityIndicator,
   AsyncStorage,
+  Alert,
 } from 'react-native';
+import {history} from 'react-router-native';
 import {Formik} from 'formik';
 import * as yup from 'yup';
 import * as services from '../services/userServices';
-
+import {session} from './SessionStore';
 
 const styles = StyleSheet.create({
   container: {
@@ -57,8 +60,6 @@ const registerSchema = yup.object().shape({
     .oneOf([yup.ref('password'), null], 'Passwords must match'),
 });
 
-
-
 const handleSubmit = (values, {setSubmitting}) => {
   services
     .Register(values)
@@ -68,32 +69,35 @@ const handleSubmit = (values, {setSubmitting}) => {
 };
 
 const OnResponse = response => {
-  const [userId, setUserId] = useState('');
-  const [JWTToken, setJWTToken] = useState(0);
-  const [email, setEmail] = useState('');
-
-   let userInfo ={
-        userId : setUserId(response.data.userId),
-        JWTToken : setJWTToken(response.data.JWTToken),
-        email : setEmail(response.data.email),
-   };
-     var userkeyMap = [['userId',userInfo.userId],['JWTToken',userInfo.JWTToken],['email',userInfo.email]]
-   const storeUserInfo  = async userInfo =>{
-     try{
-        await AsyncStorage.multiSet([userkeyMap,err => {}])
-     }catch(error){
-       console.log('error')
-
-     }
-        
+  if (response.data.response) {
+    Alert.alert(
+      'Notification',
+      'Done! Welcome to KaatsuApp',
+      [
+        {
+          text: 'OK',
+          onPress: () => {
+            setTimeout(history.push('login'), 1000);
+            console.log('OK Pressed');
+          },
+        },
+      ],
+      {cancelable: false},
+    );
+  } else {
+    Alert.alert(
+      'Error',
+      'SignUp failed',
+      [{text: 'OK', onPress: () => console.log('OK Pressed')}],
+      {cancelable: false},
+    );
+  }
   console.log('Success:' + JSON.stringify(response, undefined, '\t'));
-  // if success push to  Monitors
 };
 
 const OnError = response => {
   console.log(response);
 };
-// Check if user is signed in already if so rediret to back to
 
 export const Signup = props => (
   <Formik
@@ -112,6 +116,7 @@ export const Signup = props => (
             style={styles.inputStyle}
             onChangeText={props.handleChange('email')}
             placeholder="Enter Email"
+            returnKeyType={'next'}
             values={props.values.email}
           />
           {props.errors.email && props.touched.email ? (
@@ -119,9 +124,11 @@ export const Signup = props => (
           ) : null}
 
           <TextInput
+            secureTypeText={true}
             style={styles.inputStyle}
             onChangeText={props.handleChange('password')}
             placeholder="Password"
+            returnKeyType={'next'}
             values={props.values.password}
           />
           {props.errors.password && props.touched.password ? (
@@ -129,9 +136,11 @@ export const Signup = props => (
           ) : null}
 
           <TextInput
+            secureTypeText={true}
             style={styles.inputStyle}
             onChangeText={props.handleChange('confirmPassword')}
             placeholder="Confirm Password"
+            returnKeyType={'send'}
             values={props.values.confirmPassword}
           />
           {props.errors.confirmPassword && props.touched.confirmPassword ? (

@@ -21,7 +21,7 @@ export const GetToken = val => {
     data: `grant_type=password&email=${val.email}&username=${
       val.email
     }&password=${val.password}`,
-    // crossdomain: true,
+    //crossdomain: true,
   };
   return axios(url, config);
 };

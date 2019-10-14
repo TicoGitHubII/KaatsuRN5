@@ -1,11 +1,14 @@
 import React from 'react';
-import {Button, Text, StyleSheet, View, TouchableOpacity} from 'react-native';
-import {Colors} from 'react-native/Libraries/NewAppScreen';
+import {
+  Text,
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  AsyncStorage,
+} from 'react-native';
 import * as myServices from '../services/userServices';
-// import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-// import { getSessionCookie, SessionConsumer, SessionProvider, setSessionCookie } from '../cookies/MyCookies';
-// import { ToastContainer, toast } from 'react-toastify';
-// import 'react-toastify/dist/ReactToastify.css';
+import {history} from 'react-router-native';
+import {session} from './SessionStore';
 
 const styles = StyleSheet.create({
   monitor: {
@@ -81,6 +84,7 @@ const styles = StyleSheet.create({
   },
 });
 var tmp, tmp2;
+
 class KaatsuMonitor extends React.Component {
   constructor(props) {
     super();
@@ -148,7 +152,6 @@ class KaatsuMonitor extends React.Component {
   };
 
   handleStartClick2 = () => {
-    //icrement second by 1
     this.time2();
   };
 
@@ -181,12 +184,8 @@ class KaatsuMonitor extends React.Component {
   };
 
   handleLogOut = () => {
-    Cookies.remove('session');
-    this.props.history.push(`/login`);
-  };
-
-  notify = () => {
-    toast('Its running !');
+    session.clear();
+    history.push('/login');
   };
 
   onSuccess = response => {
@@ -196,14 +195,7 @@ class KaatsuMonitor extends React.Component {
     console.log(response);
   };
 
-  componentDidMount = () => {
-    // let cookieSet = getSessionCookie()
-    // if (!cookieSet) {
-    //     alert("your not logged in")
-    //     this.props.history.goBack();
-    // }
-    // console.log(JSON.stringify(cookieSet));
-  };
+  componentDidMount = () => {};
   render() {
     return (
       <View style={styles.wrapperMonitor}>

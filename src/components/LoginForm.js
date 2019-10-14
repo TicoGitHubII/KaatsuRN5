@@ -1,15 +1,20 @@
 import React from 'react';
 import {
+  ActivityIndicator,
   TouchableOpacity,
   Text,
   StyleSheet,
   View,
   TextInput,
+  Alert,
+  AsyncStorage,
 } from 'react-native';
+import {withRouter, Redirect} from 'react-router-native';
 import {Formik} from 'formik';
 import * as yup from 'yup';
 import * as services from '../services/userServices';
-
+import {session} from './SessionStore';
+import KaatsuMonitor from './Monitor';
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 20,
@@ -51,7 +56,7 @@ const loginSchema = yup.object().shape({
 });
 
 const handleSubmit = (values, {setSubmitting}) => {
-  console.log(values);
+  console.log(`Form Submit Values : ${values}`);
   // alert(
   //   `Your email is ${values.email} and password entered ${values.password}`,
   // );
@@ -62,11 +67,38 @@ const handleSubmit = (values, {setSubmitting}) => {
     .catch(response => OnError(response));
 
   setSubmitting(false);
+
+  return <Redirect to="\Monitor" />;
 };
+
+// Create Session Object
+
+// const loading = () => {
+//   return <ActivityIndicator size="large" color="#C55545" />;
+// };
 const OnResponse = response => {
-  console.log(response);
-  // on success set  AsyncStorage
-  //   token and UserId and Email
+  let username = response.data.userName;
+  let newToken = response.data.access_token;
+
+  // // SetSession
+  // session.saveUser('access_token', newToken);
+  // session.saveUser('username', username);
+  // console.log(session.retrieveUser(username));
+  // // Redirect
+
+  // if (newToken) {
+  //   return <displayView />;
+  // } else {
+  //   Alert.alert(
+  //     'Failed Verification',
+  //     'Please Sign Up!',
+  //     [{text: 'OK', onPress: () => console.log('OK Pressed')}],
+  //     {cancelable: false},
+  //   );
+  //   <Redirect to="/Signup" />;
+  // }
+
+  console.log('Success:' + JSON.stringify(response, undefined, '\t'));
 };
 
 const OnError = response => {
@@ -90,15 +122,18 @@ export const LoginForm = props => (
             onChangeText={props.handleChange('email')}
             placeholder="Enter Email"
             values={props.values.email}
+            returnKeyType={'next'}
           />
           {props.errors.email && props.touched.email ? (
             <Text style={{color: 'red'}}>{props.errors.email}</Text>
           ) : null}
           <TextInput
+            secureTypeEntry={true}
             style={styles.inputStyle}
             onChangeText={props.handleChange('password')}
             placeholder="Password"
             values={props.values.password}
+            returnKeyType={'go'}
           />
           {props.errors.password && props.touched.password ? (
             <Text style={{color: 'red'}}>{props.errors.password}</Text>
@@ -121,3 +156,9 @@ export const LoginForm = props => (
     }}
   </Formik>
 );
+
+class displayView extends React.Component {
+  render() {
+    return <Redirect to="\Monitor" />;
+  }
+}
