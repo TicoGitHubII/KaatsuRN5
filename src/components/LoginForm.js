@@ -9,14 +9,16 @@ import {
   Alert,
   AsyncStorage,
 } from 'react-native';
-import {withRouter, Redirect} from 'react-router-native';
+import history from 'history/createMemoryHistory';
+import {} from 'react-router-native';
 import {Formik} from 'formik';
 import * as yup from 'yup';
 import * as services from '../services/userServices';
 import {session} from './SessionStore';
-import KaatsuMonitor from './Monitor';
+
 const styles = StyleSheet.create({
   container: {
+    paddingTop: 25,
     paddingHorizontal: 20,
   },
   paragraphText: {
@@ -55,7 +57,7 @@ const loginSchema = yup.object().shape({
   password: yup.string().required('Password is required'),
 });
 
-const handleSubmit = (values, {setSubmitting}) => {
+const handleSubmit = (values, {setSubmitting}, props) => {
   console.log(`Form Submit Values : ${values}`);
   // alert(
   //   `Your email is ${values.email} and password entered ${values.password}`,
@@ -67,36 +69,31 @@ const handleSubmit = (values, {setSubmitting}) => {
     .catch(response => OnError(response));
 
   setSubmitting(false);
-
-  return <Redirect to="\Monitor" />;
 };
 
 // Create Session Object
 
-// const loading = () => {
-//   return <ActivityIndicator size="large" color="#C55545" />;
-// };
-const OnResponse = response => {
+const OnResponse = (response, props) => {
   let username = response.data.userName;
   let newToken = response.data.access_token;
 
-  // // SetSession
-  // session.saveUser('access_token', newToken);
-  // session.saveUser('username', username);
-  // console.log(session.retrieveUser(username));
+  // SetSession
+  session.saveUser('access_token', newToken);
+  session.saveUser('username', username);
+  console.log(session.retrieveUser(username));
   // // Redirect
 
-  // if (newToken) {
-  //   return <displayView />;
-  // } else {
-  //   Alert.alert(
-  //     'Failed Verification',
-  //     'Please Sign Up!',
-  //     [{text: 'OK', onPress: () => console.log('OK Pressed')}],
-  //     {cancelable: false},
-  //   );
-  //   <Redirect to="/Signup" />;
-  // }
+  if (newToken) {
+    history.push('Monitor');
+  } else {
+    Alert.alert(
+      'Failed Verification',
+      'Please Sign Up!',
+      [{text: 'OK', onPress: () => console.log('OK Pressed')}],
+      {cancelable: false},
+    );
+    history.push('SignUp');
+  }
 
   console.log('Success:' + JSON.stringify(response, undefined, '\t'));
 };
@@ -156,9 +153,3 @@ export const LoginForm = props => (
     }}
   </Formik>
 );
-
-class displayView extends React.Component {
-  render() {
-    return <Redirect to="\Monitor" />;
-  }
-}

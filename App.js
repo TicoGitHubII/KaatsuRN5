@@ -16,37 +16,61 @@ import {
   StatusBar,
   AsyncStorage,
 } from 'react-native';
-
+import {
+  Header,
+  Button,
+  Icon,
+  Left,
+  Body,
+  Right,
+  Container,
+  Title,
+  Content,
+} from 'native-base';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {Signup} from './src/components/Signup';
 import KaatsuMonitor from './src/components/Monitor';
 import {LoginForm} from './src/components/LoginForm';
 import {Home} from './src/components/Home';
-import {Route, BackButton, NativeRouter} from 'react-router-native';
+import {Router, Route, Switch} from 'react-router-native';
+import createHistory from 'history/createMemoryHistory';
 
+let history = createHistory();
 class App extends React.Component {
   render() {
     return (
-      <NativeRouter>
-        <BackButton>
-          <View style={styles.sectionContainer}>
-            <StatusBar
-              background="#C55545"
-              barStyle="light-content"
-              networkActivityIndicatorVisible
-            />
-            <Route exact path="/" component={Home} />
-            <Route path="/LoginForm" component={LoginForm} />
-            <Route path="/Monitor" component={KaatsuMonitor} />
-            <Route path="/Signup" component={Signup} />
-          </View>
-        </BackButton>
-      </NativeRouter>
+      <Container>
+        {/* <StatusBar barStyle="light-content" networkActivityIndicatorVisible /> */}
+        <Header style={styles.head}>
+          <Left>
+            <Button transparent>
+              <Icon name="arrow-back" />
+            </Button>
+          </Left>
+          <Body>
+            <Title style={styles.title}>Kaatsu App</Title>
+          </Body>
+          <Right />
+        </Header>
+
+        <Router history={history}>
+          <Route exact path="/" component={Home} />
+          <Route path="/LoginForm" component={LoginForm} />
+          <Route path="/Monitor" component={KaatsuMonitor} />
+          <Route path="/Signup" component={Signup} />
+        </Router>
+      </Container>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  head: {
+    backgroundColor: '#C55545',
+    fontSize: 12,
+    fontWeight: '400',
+    color: Colors.white,
+  },
   navItem: {
     backgroundColor: '#C55545',
     borderRadius: 5,
@@ -73,6 +97,9 @@ const styles = StyleSheet.create({
   sectionContainer: {
     marginTop: 32,
     paddingHorizontal: 24,
+  },
+  title: {
+    marginLeft: 'auto',
   },
   sectionTitle: {
     fontSize: 24,
