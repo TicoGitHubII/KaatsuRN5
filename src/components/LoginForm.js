@@ -83,7 +83,7 @@ const OnResponse = (response, props) => {
   // // Redirect
 
   if (newToken) {
-    history.push('Monitor');
+    console.log(newToken); // history.push('Monitor');
   } else {
     Alert.alert(
       'Failed Verification',
@@ -91,7 +91,7 @@ const OnResponse = (response, props) => {
       [{text: 'OK', onPress: () => console.log('OK Pressed')}],
       {cancelable: false},
     );
-    history.push('SignUp');
+    // history.push('SignUp');
   }
 
   console.log('Success:' + JSON.stringify(response, undefined, '\t'));

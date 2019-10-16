@@ -32,7 +32,8 @@ import {Signup} from './src/components/Signup';
 import KaatsuMonitor from './src/components/Monitor';
 import {LoginForm} from './src/components/LoginForm';
 import {Home} from './src/components/Home';
-import {Router, Route, nativeHistory} from 'react-router-native';
+import {createAppContainer} from 'react-navigation';
+import {createStackNavigator} from 'react-navigation-stack';
 
 class App extends React.Component {
   render() {
@@ -50,17 +51,28 @@ class App extends React.Component {
           </Body>
           <Right />
         </Header>
+        <Home />
 
-        <Router history={nativeHistory}>
+        {/* <Router history={nativeHistory}>
           <Route exact path="/" component={Home} />
           <Route path="/LoginForm" component={LoginForm} />
           <Route path="/Monitor" component={KaatsuMonitor} />
           <Route path="/Signup" component={Signup} />
-        </Router>
+        </Router> */}
       </Container>
     );
   }
 }
+
+const AppNavigator = createStackNavigator(
+  {
+    Home: App,
+    Login: LoginForm,
+    Signup: Signup,
+    Monitor: KaatsuMonitor,
+  },
+  {initialRouteName: 'Home'},
+);
 
 const styles = StyleSheet.create({
   head: {
@@ -122,5 +134,6 @@ const styles = StyleSheet.create({
     textAlign: 'right',
   },
 });
+export const AppContainer = createAppContainer(AppNavigator);
 
-export default App;
+// export default App;
