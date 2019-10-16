@@ -13,7 +13,7 @@ class SessionStore {
   }
 
   async retrieveUser(key) {
-    var item = AsyncStorage.getItem(key);
+    let item = await AsyncStorage.getItem(key);
 
     return item;
   }

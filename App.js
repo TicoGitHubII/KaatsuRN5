@@ -32,10 +32,8 @@ import {Signup} from './src/components/Signup';
 import KaatsuMonitor from './src/components/Monitor';
 import {LoginForm} from './src/components/LoginForm';
 import {Home} from './src/components/Home';
-import {Router, Route, Switch} from 'react-router-native';
-import createHistory from 'history/createMemoryHistory';
+import {Router, Route, nativeHistory} from 'react-router-native';
 
-let history = createHistory();
 class App extends React.Component {
   render() {
     return (
@@ -53,7 +51,7 @@ class App extends React.Component {
           <Right />
         </Header>
 
-        <Router history={history}>
+        <Router history={nativeHistory}>
           <Route exact path="/" component={Home} />
           <Route path="/LoginForm" component={LoginForm} />
           <Route path="/Monitor" component={KaatsuMonitor} />
@@ -124,16 +122,5 @@ const styles = StyleSheet.create({
     textAlign: 'right',
   },
 });
-
-/* <SafeAreaView>
-<ScrollView
-contentInsetAdjustmentBehavior="automatic"
-style={styles.scrollView}>
-{global.HermesInternal == null ? null : (
-  <View style={styles.engine}>
-    <Text style={styles.footer}>Engine: Hermes</Text>
-  </View> 
-       </ScrollView>
-          </SafeAreaView>*/
 
 export default App;

@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  ActivityIndicator,
   TouchableOpacity,
   Text,
   StyleSheet,
@@ -80,7 +79,7 @@ const OnResponse = (response, props) => {
   // SetSession
   session.saveUser('access_token', newToken);
   session.saveUser('username', username);
-  console.log(session.retrieveUser(username));
+
   // // Redirect
 
   if (newToken) {
